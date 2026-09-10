@@ -26,10 +26,11 @@ RUN sed -i \
     -e 's|deb.debian.org/debian-security|archive.debian.org/debian-security|g' \
     -e 's|deb.debian.org/debian|archive.debian.org/debian|g' \
     -e '/stretch-updates/d' \
+    -e '/bullseye-security/d' \
     /etc/apt/sources.list && \
-    apt-get update -y && \
-    apt-get install -y gnupg2 && \
-    apt-get update -y && \
+    apt-get update -y -o Acquire::Check-Valid-Until=false && \
+    apt-get install -y --no-install-recommends gnupg2 ca-certificates && \
+    apt-get update -y -o Acquire::Check-Valid-Until=false && \
     apt-get install -y --no-install-recommends unzip wget zip openjdk-11-jdk && \
     groupadd -g ${container_user_gid} ${container_user_group} &&\
     rm -rf /var/lib/apt/lists/* &&\
